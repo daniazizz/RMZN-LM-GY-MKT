@@ -207,7 +207,7 @@ def run_eos(username, password, sheet):
         print(e)
         # Step 2: Navigate to the desired page
         driver.get(f"https://eos.firstinfresh.be/shop/item/{e.get('GY-REF')}")
-        human_sleep(1, 3)
+        human_sleep(3, 5)
         print(driver.page_source)  # This will print the full HTML of the current page
         capture_screenshot_and_upload(
             driver, f"item-{e.get('GY-REF')}.png"
@@ -251,7 +251,7 @@ def run_eos_mkt(username, password, sheet):
         print(e)
         # Step 2: Navigate to the desired page
         driver.get(f"https://eos.firstinfresh.be/shop/item/{e.get('GY-REF')}")
-        human_sleep(1, 3)
+        human_sleep(3, 5)
         print(driver.page_source)  # This will print the full HTML of the current page
         capture_screenshot_and_upload(
             driver, f"item-{e.get('GY-REF')}.png"
