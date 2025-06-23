@@ -93,10 +93,8 @@ def delete_row(sheet, row):
 # Constants for column indexes
 GY_MKT_UNIT = 6
 GY_EXP_UNIT = 7
-PV_MKT = 13
-PV_EXP = 14
-LAST_UPDATE_COL_MKT = 15
-LAST_UPDATE_COL_EXP = 16
+LAST_UPDATE_COL_MKT = 16
+LAST_UPDATE_COL_EXP = 17
 
 # Load configuration
 config = get_autogreens_config()
@@ -218,11 +216,11 @@ def run_eos(username, password, sheet):
         #Try or skip
         
         try:
-         vp_data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[4]/td[2]")
-         scraped_data = vp_data_element.text
-         scraped_data = extract_price(scraped_data)
-         print(scraped_data)
-         update_cell(sheet, i, PV_EXP, scraped_data)
+        #  vp_data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[4]/td[2]")
+        #  scraped_data = vp_data_element.text
+        #  scraped_data = extract_price(scraped_data)
+        #  print(scraped_data)
+        #  update_cell(sheet, i, PV_EXP, scraped_data)
          data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[2]/td[2]")
          scraped_data = data_element.text
          print(scraped_data)
@@ -262,11 +260,11 @@ def run_eos_mkt(username, password, sheet):
         #Try or skip
         
         try:
-         vp_data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[4]/td[2]")
-         scraped_data = vp_data_element.text
-         scraped_data = extract_price(scraped_data)
-         print(scraped_data)
-         update_cell(sheet, i, PV_MKT, scraped_data)
+        #  vp_data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[4]/td[2]")
+        #  scraped_data = vp_data_element.text
+        #  scraped_data = extract_price(scraped_data)
+        #  print(scraped_data)
+        #  update_cell(sheet, i, PV_MKT, scraped_data)
          data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[2]/td[2]")
          scraped_data = data_element.text
          print(scraped_data)
