@@ -167,7 +167,7 @@ def init_eos(username, password):
         driver = webdriver.Chrome(options=options, service=service)
 
         # Step 1: Log in to the website
-        driver.get("https://eos.firstinfresh.be/login")
+        driver.get("https://eos.firstinfresh.be/user/login")
         human_sleep(2, 4)
         print(username, password)
 
