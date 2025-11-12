@@ -96,6 +96,17 @@ GY_EXP_UNIT = 7
 LAST_UPDATE_COL_MKT = 16
 LAST_UPDATE_COL_EXP = 17
 
+# XPATH Constants
+# XPATH_LOGIN_USERNAME_INPUT = "/html/body/div[2]/div/div/div/form/div[1]/div[1]/input"
+XPATH_LOGIN_USERNAME_INPUT = "/html/body/div[1]/main/div/div/div[2]/form/div[1]/input"
+# XPATH_LOGIN_PASSWORD_INPUT = "/html/body/div[2]/div/div/div/form/div[1]/div[2]/input"
+XPATH_LOGIN_PASSWORD_INPUT = "/html/body/div[1]/main/div/div/div[2]/form/div[2]/input"
+# XPATH_OBSTRUCTING_ELEMENT = "/html/body/div[3]"
+# XPATH_OBSTRUCTING_ELEMENT = "/html/body/div[3]"
+# XPATH_LOGIN_BUTTON = "/html/body/div[2]/div/div/div/form/div[2]/input"
+XPATH_LOGIN_BUTTON = "/html/body/div[1]/main/div/div/div[2]/form/div[3]/input"
+# XPATH_ITEM_DATA_UNIT_PRICE = "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[2]/td[2]"                  
+XPATH_ITEM_DATA_UNIT_PRICE = "/html/body/div[1]/main/div/div/div[2]/article/section/div[1]/div/div/div[9]/div"                  
 # Load configuration
 config = get_autogreens_config()
 
@@ -148,7 +159,7 @@ def init_eos(username, password):
    print(username, password)
 
    # Enter username
-   username_input = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/form/div[1]/div[1]/input")
+   username_input = driver.find_element(By.XPATH, XPATH_LOGIN_USERNAME_INPUT)
    ActionChains(driver).move_to_element(username_input).click().perform()
    human_sleep(1, 3)
    username_input.send_keys(username)  # Replace with your username
@@ -156,7 +167,7 @@ def init_eos(username, password):
    print("Username entered")
 
    # Enter password
-   password_input = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/form/div[1]/div[2]/input")
+   password_input = driver.find_element(By.XPATH, XPATH_LOGIN_PASSWORD_INPUT)
    ActionChains(driver).move_to_element(password_input).click().perform()
    human_sleep(1, 3)
    password_input.send_keys(password)  # Replace with your password
@@ -168,12 +179,12 @@ def init_eos(username, password):
             driver, "login-page.png"
         )
    
-   element_to_remove = driver.find_element(By.XPATH, "/html/body/div[3]")
-   driver.execute_script("arguments[0].parentNode.removeChild(arguments[0]);", element_to_remove)
-   print("Obstructing element removed.")
+   # element_to_remove = driver.find_element(By.XPATH, XPATH_OBSTRUCTING_ELEMENT)
+   # driver.execute_script("arguments[0].parentNode.removeChild(arguments[0]);", element_to_remove)
+   # print("Obstructing element removed.")
     
    # Submit the form
-   login_button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/form/div[2]/input")
+   login_button = driver.find_element(By.XPATH, XPATH_LOGIN_BUTTON)
    ActionChains(driver).move_to_element(login_button).click().perform()
    human_sleep(2, 4)
    print("Logged in successfully")
@@ -204,7 +215,7 @@ def run_eos(username, password, sheet):
     for e in data:
         print(e)
         # Step 2: Navigate to the desired page
-        driver.get(f"https://eos.firstinfresh.be/shop/item/{e.get('GY-REF')}")
+        driver.get(f"https://eos.firstinfresh.be/product/{e.get('GY-REF')}")
         human_sleep(3, 5)
         print(driver.page_source)  # This will print the full HTML of the current page
         capture_screenshot_and_upload(
@@ -221,7 +232,7 @@ def run_eos(username, password, sheet):
         #  scraped_data = extract_price(scraped_data)
         #  print(scraped_data)
         #  update_cell(sheet, i, PV_EXP, scraped_data)
-         data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[2]/td[2]")
+         data_element = driver.find_element(By.XPATH, XPATH_ITEM_DATA_UNIT_PRICE)
          scraped_data = data_element.text
          print(scraped_data)
          update_cell(sheet, i, GY_EXP_UNIT, scraped_data)
@@ -248,7 +259,7 @@ def run_eos_mkt(username, password, sheet):
     for e in data:
         print(e)
         # Step 2: Navigate to the desired page
-        driver.get(f"https://eos.firstinfresh.be/shop/item/{e.get('GY-REF')}")
+        driver.get(f"https://eos.firstinfresh.be/product/{e.get('GY-REF')}")
         human_sleep(3, 5)
         print(driver.page_source)  # This will print the full HTML of the current page
         capture_screenshot_and_upload(
@@ -265,7 +276,7 @@ def run_eos_mkt(username, password, sheet):
         #  scraped_data = extract_price(scraped_data)
         #  print(scraped_data)
         #  update_cell(sheet, i, PV_MKT, scraped_data)
-         data_element = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div[6]/table/tbody/tr[2]/td[2]")
+         data_element = driver.find_element(By.XPATH, XPATH_ITEM_DATA_UNIT_PRICE)
          scraped_data = data_element.text
          print(scraped_data)
          update_cell(sheet, i, GY_MKT_UNIT, scraped_data)
