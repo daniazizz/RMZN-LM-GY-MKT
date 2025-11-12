@@ -18,7 +18,7 @@ s3_client = boto3.client("s3")
 
 import os
 
-DEBUG = os.getenv("DEBUG")
+DEBUG = True
 
 
 # Function to take a screenshot and upload it to S3
