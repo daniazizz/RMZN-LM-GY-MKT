@@ -326,8 +326,17 @@ def run_eos(username, password, sheet):
         
         data = read_data(sheet)
         i = 2
+        consecutive_errors = 0
+        max_consecutive_errors = 5
+        
         for e in data:
             print(e)
+            
+            # Check if we've hit the consecutive error limit
+            if consecutive_errors >= max_consecutive_errors:
+                print(f"Stopping: {consecutive_errors} consecutive errors encountered")
+                break
+            
             try:
                 # Step 2: Navigate to the desired page
                 driver.get(f"https://eos.firstinfresh.be/product/{e.get('GY-REF')}")
@@ -352,17 +361,23 @@ def run_eos(username, password, sheet):
                     update_cell(sheet, i, GY_EXP_UNIT, scraped_data)
                     ct = datetime.datetime.now()
                     update_cell(sheet, i, LAST_UPDATE_COL_EXP, str(ct))
+                    consecutive_errors = 0  # Reset on success
                 except Exception as e:
                     print(f"Error scraping data for {e.get('GY-REF')}: {str(e)}")
-                    update_cell(sheet, i, GY_EXP_UNIT, "Error")
-                    ct = datetime.datetime.now()
-                    update_cell(sheet, i, LAST_UPDATE_COL_EXP, f"Error {str(ct)}")
+                    consecutive_errors += 1
+                    try:
+                        update_cell(sheet, i, GY_EXP_UNIT, "Error")
+                        ct = datetime.datetime.now()
+                        update_cell(sheet, i, LAST_UPDATE_COL_EXP, f"Error {str(ct)}")
+                    except Exception as update_error:
+                        print(f"Failed to update error status for item {e.get('GY-REF')}: {str(update_error)}")
                 
                 # Random delay between items to avoid pattern detection
-                human_sleep(2, 5)
+                human_sleep(1, 3)
                     
             except Exception as e:
                 print(f"Error processing item {e.get('GY-REF')}: {str(e)}")
+                consecutive_errors += 1
                 try:
                     update_cell(sheet, i, GY_EXP_UNIT, "Error")
                     ct = datetime.datetime.now()
@@ -391,8 +406,17 @@ def run_eos_mkt(username, password, sheet):
         
         data = read_data(sheet)
         i = 2
+        consecutive_errors = 0
+        max_consecutive_errors = 5
+        
         for e in data:
             print(e)
+            
+            # Check if we've hit the consecutive error limit
+            if consecutive_errors >= max_consecutive_errors:
+                print(f"Stopping: {consecutive_errors} consecutive errors encountered")
+                break
+            
             try:
                 # Step 2: Navigate to the desired page
                 driver.get(f"https://eos.firstinfresh.be/product/{e.get('GY-REF')}")
@@ -417,17 +441,23 @@ def run_eos_mkt(username, password, sheet):
                     update_cell(sheet, i, GY_MKT_UNIT, scraped_data)
                     ct = datetime.datetime.now()
                     update_cell(sheet, i, LAST_UPDATE_COL_MKT, str(ct))
+                    consecutive_errors = 0  # Reset on success
                 except Exception as e:
                     print(f"Error scraping data for {e.get('GY-REF')}: {str(e)}")
-                    update_cell(sheet, i, GY_MKT_UNIT, "Error")
-                    ct = datetime.datetime.now()
-                    update_cell(sheet, i, LAST_UPDATE_COL_MKT, f"Error {str(ct)}")
+                    consecutive_errors += 1
+                    try:
+                        update_cell(sheet, i, GY_MKT_UNIT, "Error")
+                        ct = datetime.datetime.now()
+                        update_cell(sheet, i, LAST_UPDATE_COL_MKT, f"Error {str(ct)}")
+                    except Exception as update_error:
+                        print(f"Failed to update error status for item {e.get('GY-REF')}: {str(update_error)}")
                 
                 # Random delay between items to avoid pattern detection
-                human_sleep(2, 5)
+                human_sleep(1, 3)
                     
             except Exception as e:
                 print(f"Error processing item {e.get('GY-REF')}: {str(e)}")
+                consecutive_errors += 1
                 try:
                     update_cell(sheet, i, GY_MKT_UNIT, "Error")
                     ct = datetime.datetime.now()
