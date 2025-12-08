@@ -315,10 +315,11 @@ def extract_price(input_string):
 
 def format_price(scraped_data):
     """
-    Format scraped price data to extract just the numeric value.
+    Format scraped price data to extract just the numeric value with comma as decimal separator.
     Examples:
         "€6,95 29,38%" => "6,95"
         "€ 1,79" => "1,79"
+        "1.80" => "1,80"
         "6,95" => "6,95"
     """
     if not scraped_data:
@@ -328,13 +329,16 @@ def format_price(scraped_data):
     scraped_data = scraped_data.strip()
     
     # Pattern to match price with optional € symbol and optional percentage
-    # Matches: €6,95 or € 6,95 or 6,95 (with or without percentage after)
-    price_pattern = r"€?\s*(\d+[.,]\d{2})"
+    # Matches: €6,95 or € 6,95 or 6,95 or 1.80 (with or without percentage after)
+    price_pattern = r"€?\s*(\d+[.,]\d{1,2})"
     
     match = re.search(price_pattern, scraped_data)
     if match:
-        # Return just the numeric part (without € symbol)
-        return match.group(1)
+        # Get just the numeric part (without € symbol)
+        price = match.group(1)
+        # Replace period with comma for decimal separator
+        price = price.replace('.', ',')
+        return price
     
     # If no pattern matched, return the original data
     return scraped_data
