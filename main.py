@@ -313,6 +313,32 @@ def extract_price(input_string):
     # Return the price if found, otherwise return None
     return match.group(0) if match else None
 
+def format_price(scraped_data):
+    """
+    Format scraped price data to extract just the numeric value.
+    Examples:
+        "€6,95 29,38%" => "6,95"
+        "€ 1,79" => "1,79"
+        "6,95" => "6,95"
+    """
+    if not scraped_data:
+        return scraped_data
+    
+    # Remove any leading/trailing whitespace
+    scraped_data = scraped_data.strip()
+    
+    # Pattern to match price with optional € symbol and optional percentage
+    # Matches: €6,95 or € 6,95 or 6,95 (with or without percentage after)
+    price_pattern = r"€?\s*(\d+[.,]\d{2})"
+    
+    match = re.search(price_pattern, scraped_data)
+    if match:
+        # Return just the numeric part (without € symbol)
+        return match.group(1)
+    
+    # If no pattern matched, return the original data
+    return scraped_data
+
 def run_eos_mkt(username, password, sheet):
     driver = None
     try:
@@ -356,8 +382,13 @@ def run_eos_mkt(username, password, sheet):
                     human_sleep(0.5, 1)
                     
                     scraped_data = data_element.text
-                    print(scraped_data)
-                    update_cell(sheet, i, GY_MKT_UNIT, scraped_data)
+                    print(f"Raw scraped data: {scraped_data}")
+                    
+                    # Format the price to remove € symbol and any percentage
+                    formatted_price = format_price(scraped_data)
+                    print(f"Formatted price: {formatted_price}")
+                    
+                    update_cell(sheet, i, GY_MKT_UNIT, formatted_price)
                     ct = datetime.datetime.now()
                     update_cell(sheet, i, LAST_UPDATE_COL_MKT, str(ct))
                     consecutive_errors = 0  # Reset on success
